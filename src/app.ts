@@ -4,6 +4,7 @@ import { corsMiddleware } from "./middleware/cors.middleware";
 import routes from "./router/index";
 import { connectDatabase } from "./config/database";
 import ENV_VARS from "./constants/env.const";
+import { errorHandler, notFound } from "./middleware/error.middleware";
 
 const app: Express = express();
 
@@ -15,5 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(corsMiddleware);
 
 app.use("/api", routes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;

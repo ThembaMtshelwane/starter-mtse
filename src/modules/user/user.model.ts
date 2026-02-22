@@ -2,33 +2,36 @@ import { Schema, Model, model } from "mongoose";
 import crypto from "crypto";
 import { IUser, USER_ROLES } from "./user.types";
 
-const userSchema = new Schema<IUser>({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: {
-    type: String,
-    enum: Object.values(USER_ROLES),
-    default: USER_ROLES.USER,
+const userSchema = new Schema<IUser>(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: Object.values(USER_ROLES),
+      default: USER_ROLES.USER,
+    },
+    status: { type: Boolean, default: true },
+    access_token_secret: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    refresh_token_secret: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    tokenVersion: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
   },
-  status: { type: Boolean, default: true },
-  access_token_secret: {
-    type: String,
-    required: true,
-    select: false,
-  },
-  refresh_token_secret: {
-    type: String,
-    required: true,
-    select: false,
-  },
-  tokenVersion: {
-    type: Number,
-    default: 0,
-    select: false,
-  },
-});
+  { timestamps: true },
+);
 
 // Method to omit sensitive fields
 userSchema.methods.omitFields = function (...fields: string[]) {
